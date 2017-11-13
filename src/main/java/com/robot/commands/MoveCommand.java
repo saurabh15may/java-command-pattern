@@ -46,7 +46,7 @@ public class MoveCommand implements Command {
 
 	public boolean isValidMoveCommand() {
 
-		Robot temp = robot;
+		Robot temp = new Robot(robot.getPositionX(), robot.getPositionY(), robot.getFaceDirection());
 
 		switch (robot != null ? robot.getFaceDirection() : -1) {
 

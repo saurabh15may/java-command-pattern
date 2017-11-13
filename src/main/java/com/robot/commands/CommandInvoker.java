@@ -6,15 +6,17 @@ import java.util.List;
 public class CommandInvoker {
 
 	private List<Command> robotCommands = new ArrayList<Command>();
+	private List<String> commandExecutionLog = new ArrayList<String>();
 
 	public void receiveCommands(Command command) {
 		robotCommands.add(command);
 	}
 
-	public void executeCommands() {
+	public List<String> executeCommands() {
 		for (Command command : robotCommands) {
-			command.execute();
+			commandExecutionLog.add(command.execute() == null ? "IGNORED" : "SUCCESSFUL");
 		}
+		return commandExecutionLog;
 	}
 
 }
