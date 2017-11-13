@@ -65,4 +65,9 @@ public class Robot {
 		return -1 < faceDirection && faceDirection < Direction.values().length;
 	}
 
+	public boolean isValidToString() {
+		String robotToString = positionX + "," + positionY + "," + Directions[faceDirection];
+		return robotToString.equals(toString());
+	}
+
 }

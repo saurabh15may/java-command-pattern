@@ -1,6 +1,5 @@
 package com.robot.model;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -82,8 +81,7 @@ public class RobotTest {
 		robot.setPositionY(0);
 		robot.setFaceDirection(0);
 
-		assertEquals(robot.toString(), robot.getPositionX() + "," + robot.getPositionY() + ","
-				+ robot.getDirections()[robot.getFaceDirection()]);
+		assertTrue(robot.isValidToString());
 	}
 
 	@Test
