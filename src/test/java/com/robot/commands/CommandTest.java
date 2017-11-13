@@ -45,7 +45,10 @@ public class CommandTest {
 	public void MOVECommandIsValid() {
 		Robot robot = new Robot(0, 0, 0);
 		MoveCommand moveCommand = new MoveCommand(robot);
+		assertTrue(moveCommand.execute() != null);
 
+		robot = new Robot(3, 3, 0);
+		moveCommand = new MoveCommand(robot);
 		assertTrue(moveCommand.execute() != null);
 	}
 
@@ -53,6 +56,10 @@ public class CommandTest {
 	public void MOVECommandIsInValid() {
 		Robot robot = null;
 		MoveCommand moveCommand = new MoveCommand(robot);
+		assertFalse(moveCommand.execute() != null);
+
+		robot = new Robot(4, 4, 0);
+		moveCommand = new MoveCommand(robot);
 
 		assertFalse(moveCommand.execute() != null);
 	}

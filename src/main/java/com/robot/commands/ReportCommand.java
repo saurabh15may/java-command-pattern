@@ -12,7 +12,8 @@ public class ReportCommand implements Command {
 
 	@Override
 	public Robot execute() {
-		if (robot.isValidToString()) {
+
+		if (robot != null ? robot.isValidToString() : false) {
 			System.out.println(robot);
 			return robot;
 		} else {

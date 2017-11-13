@@ -37,7 +37,6 @@ public class PlaceCommand implements Command {
 		return (-1 < positionX && positionX < Table.WIDTH.getSize())
 				&& (-1 < positionY && positionY < Table.LENGTH.getSize())
 				&& (-1 < faceDirection && faceDirection < Direction.values().length) ? true : false;
-
 	}
 
 }
