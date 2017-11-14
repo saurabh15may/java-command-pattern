@@ -23,16 +23,20 @@ public class RobotSimulator {
 	static ArrayList<String> userCommands = new ArrayList<String>();
 
 	public static void main(String[] args) {
-		// Programs takes one argument - filename
-		if (args[0] != null) {
-			// Read commands from file
-			readUserCommandInputsFromFile(args[0]);
+		try {
+			// Programs takes one argument - filename
+			if (args[0] != null) {
+				// Read commands from file
+				readUserCommandInputsFromFile(args[0]);
 
-			// Execute commands
-			List<String> commandExecutionLog = validateAndExecuteCommands();
+				// Execute commands
+				List<String> commandExecutionLog = validateAndExecuteCommands();
 
-			// Extra output(Optional) - Shows command execution sequence with it's status
-			printExecutionLog(commandExecutionLog);
+				if (args.length == 2 ? args[1].equals("--log") : false)
+					printExecutionLog(commandExecutionLog);
+			}
+		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+			e.printStackTrace();
 		}
 
 	}
@@ -52,11 +56,11 @@ public class RobotSimulator {
 	private static List<String> validateAndExecuteCommands() {
 		CommandInvoker invoker = new CommandInvoker();
 
-		// Loop through all the userCommands and prepare the List of Command Objects to
-		// be invoked later in sequence
+		// Loop through all the userCommands and prepare the List of Command
+		// Objects to be invoked later in sequence
 		for (String command : userCommands) {
-			UserCommand uCommand = (isValidPlaceCommand(command)) ? UserCommand.PLACE
-					: (isValidRobotCommand(command) ? UserCommand.valueOf(command) : UserCommand.INVALID);
+			UserCommand uCommand = isValidRobotCommand(command) ? UserCommand.valueOf(command)
+					: (isValidPlaceCommand(command) ? UserCommand.PLACE : UserCommand.INVALID);
 
 			switch (uCommand) {
 			case PLACE:
@@ -84,32 +88,41 @@ public class RobotSimulator {
 				break;
 			}
 		}
-		// The invoker executes all the commands and return the execution log at the end
+		// The invoker executes all the commands and return the execution log
 		return invoker.executeCommands();
 	}
 
 	public static boolean isValidRobotCommand(String command) {
+		if (command.contains("PLACE"))
+			command += "X";
 		return UserCommand.getCommandList().contains(command);
 	}
 
 	public static boolean isValidPlaceCommand(String command) {
 		boolean isValid = false;
-		if (command.contains(" ")) {
-			String[] tokens = command.split(" ");
-			if (tokens[0].equals("PLACE") && tokens.length == 2) {
-				String[] tparams = tokens[1].split(",");
-				int positionX = Integer.parseInt(tparams[0].trim());
-				int positionY = Integer.parseInt(tparams[1].trim());
-				String fDirection = tparams[2].trim();
-				int faceDirection = fDirection.equals("NORTH") ? 0
-						: (fDirection.equals("EAST") ? 1
-								: (fDirection.equals("SOUTH") ? 2 : (fDirection.equals("WEST") ? 3 : -1)));
+		try {
+			if (command.contains(" ")) {
+				String[] tokens = command.split(" ");
+				if (tokens[0].equals("PLACE") && tokens.length == 2) {
+					String[] tparams = tokens[1].split(",");
+					if (tparams.length == 3) {
+						int positionX = Integer.parseInt(tparams[0].trim());
+						int positionY = Integer.parseInt(tparams[1].trim());
+						String fDirection = tparams[2].trim();
+						int faceDirection = fDirection.equals("NORTH") ? 0
+								: (fDirection.equals("EAST") ? 1
+										: (fDirection.equals("SOUTH") ? 2 : (fDirection.equals("WEST") ? 3 : -1)));
 
-				PlaceCommand pCommand = new PlaceCommand(robot, positionX, positionY, faceDirection);
-				isValid = pCommand.isValidPlaceCommand();
-				if (isValid)
-					placeCommand = pCommand;
+						PlaceCommand pCommand = new PlaceCommand(robot, positionX, positionY, faceDirection);
+						isValid = pCommand.isValidPlaceCommand();
+						if (isValid)
+							placeCommand = pCommand;
+					}
+				}
 			}
+		} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+			isValid = false;
+			e.printStackTrace();
 		}
 		return isValid;
 	}

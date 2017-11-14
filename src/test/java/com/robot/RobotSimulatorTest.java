@@ -37,6 +37,9 @@ public class RobotSimulatorTest {
 
 	@Test
 	public void UserPLACECommandInputIsInValid() {
+		assertFalse(RobotSimulator.isValidPlaceCommand("PLACE"));
+		assertFalse(RobotSimulator.isValidPlaceCommand("PLACE 5"));
+		assertFalse(RobotSimulator.isValidPlaceCommand("PLACE 1,1"));
 		assertFalse(RobotSimulator.isValidPlaceCommand("PLACE 0,0,SKY"));
 		assertFalse(RobotSimulator.isValidPlaceCommand("PLACE -1,-1,SOUTH"));
 		assertFalse(RobotSimulator.isValidPlaceCommand("PLACE 5,5,NORTH"));
