@@ -35,8 +35,8 @@ public class RobotSimulator {
 				if (args.length == 2 ? args[1].equals("--log") : false)
 					printExecutionLog(commandExecutionLog);
 			}
-		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-			e.printStackTrace();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("\nPlease provide filename as an argument!!!");
 		}
 
 	}
@@ -48,7 +48,7 @@ public class RobotSimulator {
 				userCommands.add(curentLine.trim());
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("\n Filename invalid!!! Please provide correct filename as an argument");
 		}
 
 	}
@@ -122,7 +122,7 @@ public class RobotSimulator {
 			}
 		} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
 			isValid = false;
-			e.printStackTrace();
+			System.out.println("\n Invalid Place Command!!!");
 		}
 		return isValid;
 	}
