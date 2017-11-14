@@ -1,5 +1,7 @@
-
-apply plugin: 'java-library'
+apply plugin: 'application'
+mainClassName = "com.robot.RobotSimulator"
+sourceCompatibility = 1.8
+version = '1.0'
 
 repositories {
     jcenter()
@@ -7,5 +9,17 @@ repositories {
 
 dependencies {
     testImplementation 'junit:junit:4.12'
+}
+
+run {
+    if(project.hasProperty('filename')){
+        args project.filename.split('\\s+')
+    }
+}
+  
+jar {
+   manifest {
+      attributes 'Main-Class': 'com.robot.RobotSimulator'
+   }
 }
 
