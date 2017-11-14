@@ -18,7 +18,7 @@ gradle run -Pfilename="test-data\valid-commands-2.txt --log"
 >Run the below command to run the application with addition output. 
 >Append "--log" to the filename as shown below. This will also print the command execution sequence with the status of each command at the end of the output.
 ```sh
-gradle run -Pfilename="test-data\invalid-commands.txt --log"
+gradle run -Pfilename="test-data\Invalid-commands.txt --log"
 gradle run -Pfilename="test-data\mix-commands.txt --log"
 ```
 
