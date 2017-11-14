@@ -14,24 +14,25 @@ import com.robot.commands.PlaceCommand;
 import com.robot.commands.ReportCommand;
 import com.robot.commands.RightCommand;
 import com.robot.model.Robot;
+import com.robot.model.UserCommand;
 
 public class RobotSimulator {
 
-	static Robot robot = null;
+	static Robot robot = new Robot();
+	static PlaceCommand placeCommand = null;
 	static ArrayList<String> userCommands = new ArrayList<String>();
 
 	public static void main(String[] args) {
-
+		// Programs takes one argument - filename
 		if (args[0] != null) {
-
+			// Read commands from file
 			readUserCommandInputsFromFile(args[0]);
 
+			// Execute commands
 			List<String> commandExecutionLog = validateAndExecuteCommands();
 
-			System.out.println("\n\n******** Commands execution steps *********");
-			for (int i = 0; i < userCommands.size(); i++) {
-				System.out.println(userCommands.get(i) + ": " + commandExecutionLog.get(i));
-			}
+			// Extra output(Optional) - Shows command execution sequence with it's status
+			printExecutionLog(commandExecutionLog);
 		}
 
 	}
@@ -40,7 +41,7 @@ public class RobotSimulator {
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String curentLine;
 			while ((curentLine = br.readLine()) != null) {
-				userCommands.add(curentLine);
+				userCommands.add(curentLine.trim());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -49,58 +50,75 @@ public class RobotSimulator {
 	}
 
 	private static List<String> validateAndExecuteCommands() {
-		String status = null;
 		CommandInvoker invoker = new CommandInvoker();
 
-		// Loop through all the userCommands and Validate & Execute
-		for (String cparam : userCommands) {
-			String command = cparam;
+		// Loop through all the userCommands and prepare the List of Command Objects to
+		// be invoked later in sequence
+		for (String command : userCommands) {
+			UserCommand uCommand = (isValidPlaceCommand(command)) ? UserCommand.PLACE
+					: (isValidRobotCommand(command) ? UserCommand.valueOf(command) : UserCommand.INVALID);
 
-			if (UserCommandInputValidator.isPlaceCommand(cparam))
-				command = "PLACE";
-
-			switch (command) {
-
-			case "PLACE":
-				// The first PLACE command creates the actual Robot Object and assigns it to the
-				// global reference
-				robot = new Robot();
-				PlaceCommand placeCommand = UserCommandInputValidator.isValidPlaceCommand(cparam, robot);
-				if (placeCommand != null) {
-					invoker.receiveCommands(placeCommand);
-				}
+			switch (uCommand) {
+			case PLACE:
+				invoker.receiveCommands(placeCommand);
 				break;
 
-			case "MOVE":
-				MoveCommand moveCommand = new MoveCommand(robot);
-				invoker.receiveCommands(moveCommand);
+			case MOVE:
+				invoker.receiveCommands(new MoveCommand(robot));
 				break;
 
-			case "LEFT":
-				LeftCommand leftCommand = new LeftCommand(robot);
-				invoker.receiveCommands(leftCommand);
+			case LEFT:
+				invoker.receiveCommands(new LeftCommand(robot));
 				break;
 
-			case "RIGHT":
-				RightCommand rightCommand = new RightCommand(robot);
-				invoker.receiveCommands(rightCommand);
+			case RIGHT:
+				invoker.receiveCommands(new RightCommand(robot));
 				break;
 
-			case "REPORT":
-				ReportCommand reportCommand = new ReportCommand(robot);
-				invoker.receiveCommands(reportCommand);
+			case REPORT:
+				invoker.receiveCommands(new ReportCommand(robot));
 				break;
 
 			default:
-				InvalidCommand invalidCommand = new InvalidCommand();
-				invoker.receiveCommands(invalidCommand);
+				invoker.receiveCommands(new InvalidCommand());
 				break;
 			}
-
-			// commandExecutionStatus.add(status);
 		}
-		List<String> commandExecutionLog = invoker.executeCommands();
-
-		return commandExecutionLog;
+		// The invoker executes all the commands and return the execution log at the end
+		return invoker.executeCommands();
 	}
+
+	public static boolean isValidRobotCommand(String command) {
+		return UserCommand.getCommandList().contains(command);
+	}
+
+	public static boolean isValidPlaceCommand(String command) {
+		boolean isValid = false;
+		if (command.contains(" ")) {
+			String[] tokens = command.split(" ");
+			if (tokens[0].equals("PLACE") && tokens.length == 2) {
+				String[] tparams = tokens[1].split(",");
+				int positionX = Integer.parseInt(tparams[0].trim());
+				int positionY = Integer.parseInt(tparams[1].trim());
+				String fDirection = tparams[2].trim();
+				int faceDirection = fDirection.equals("NORTH") ? 0
+						: (fDirection.equals("EAST") ? 1
+								: (fDirection.equals("SOUTH") ? 2 : (fDirection.equals("WEST") ? 3 : -1)));
+
+				PlaceCommand pCommand = new PlaceCommand(robot, positionX, positionY, faceDirection);
+				isValid = pCommand.isValidPlaceCommand();
+				if (isValid)
+					placeCommand = pCommand;
+			}
+		}
+		return isValid;
+	}
+
+	private static void printExecutionLog(List<String> commandExecutionLog) {
+		System.out.println("\n\n*********** Commands Execution log ************");
+		for (int i = 0; i < userCommands.size(); i++) {
+			System.out.println(userCommands.get(i) + ": " + commandExecutionLog.get(i));
+		}
+	}
+
 }

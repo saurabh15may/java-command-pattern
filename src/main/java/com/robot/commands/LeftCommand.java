@@ -12,21 +12,15 @@ public class LeftCommand implements Command {
 	}
 
 	@Override
-	public Robot execute() {
-		if (robot != null ? isValidLeftCommand() : false) {
+	public boolean execute() {
+		boolean isSuccess = robot != null ? robot.isActive() : false;
+
+		if (isSuccess) {
 			if (robot.getFaceDirection() == 0)
 				robot.setFaceDirection(3);
 			else
 				robot.setFaceDirection(robot.getFaceDirection() - 1);
-			return robot;
-		} else {
-			return null;
 		}
-
+		return isSuccess;
 	}
-
-	public boolean isValidLeftCommand() {
-		return true;
-	}
-
 }

@@ -19,21 +19,19 @@ public class PlaceCommand implements Command {
 	}
 
 	@Override
-	public Robot execute() {
-		if (isValidPlaceCommand()) {
+	public boolean execute() {
+		boolean isSuccess = robot != null ? isValidPlaceCommand() : false;
+		if (isSuccess) {
+			robot.reset();
 			robot.setPositionX(positionX);
 			robot.setPositionY(positionY);
-			robot.getFaceDirection();
-
-			return robot;
-		} else {
-			return null;
+			robot.setFaceDirection(faceDirection);
+			robot.setActive(true);
 		}
-
+		return isSuccess;
 	}
 
 	public boolean isValidPlaceCommand() {
-
 		return (-1 < positionX && positionX < Table.WIDTH.getSize())
 				&& (-1 < positionY && positionY < Table.LENGTH.getSize())
 				&& (-1 < faceDirection && faceDirection < Direction.values().length) ? true : false;

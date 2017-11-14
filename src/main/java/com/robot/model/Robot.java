@@ -10,6 +10,8 @@ public class Robot {
 
 	private Direction Directions[] = { Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST };
 
+	private boolean isActive;
+
 	public Robot() {
 	}
 
@@ -51,6 +53,20 @@ public class Robot {
 
 	public Direction[] getDirections() {
 		return Directions;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public void reset() {
+		this.positionX = 0;
+		this.positionY = 0;
+		this.faceDirection = 0;
 	}
 
 	public boolean isValidPositionX() {

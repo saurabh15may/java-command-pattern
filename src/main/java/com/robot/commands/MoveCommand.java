@@ -11,12 +11,10 @@ public class MoveCommand implements Command {
 	}
 
 	@Override
-	public Robot execute() {
-
-		if (isValidMoveCommand()) {
-
-			switch (robot.getFaceDirection()) {
-			// NORTH - 0, EAST - 1, SOUTH - 2, WEST - 3
+	public boolean execute() {
+		boolean isSuccess = robot != null ? (robot.isActive() ? isValidMoveCommand() : false) : false;
+		if (isSuccess) {
+			switch (robot.getFaceDirection()) {// NORTH-0, EAST-1, SOUTH-2, WEST-3
 			case 0:
 				robot.setPositionY(robot.getPositionY() + 1);
 				break;
@@ -34,22 +32,18 @@ public class MoveCommand implements Command {
 				break;
 
 			default:
+				isSuccess = false;
 				break;
-
 			}
-			return robot;
-		} else {
-			return null;
 		}
-
+		return isSuccess;
 	}
 
 	public boolean isValidMoveCommand() {
 
 		Robot temp = new Robot(robot.getPositionX(), robot.getPositionY(), robot.getFaceDirection());
 
-		switch (robot != null ? robot.getFaceDirection() : -1) {
-
+		switch (robot.getFaceDirection()) {
 		case 0:
 			temp.setPositionY(robot.getPositionY() + 1);
 			return temp.isValidPositionY();

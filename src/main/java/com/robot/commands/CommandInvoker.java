@@ -14,7 +14,7 @@ public class CommandInvoker {
 
 	public List<String> executeCommands() {
 		for (Command command : robotCommands) {
-			commandExecutionLog.add(command.execute() == null ? "IGNORED" : "SUCCESSFUL");
+			commandExecutionLog.add(command.execute() ? "SUCCESSFUL" : "IGNORED");
 		}
 		return commandExecutionLog;
 	}

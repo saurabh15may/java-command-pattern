@@ -11,15 +11,13 @@ public class ReportCommand implements Command {
 	}
 
 	@Override
-	public Robot execute() {
+	public boolean execute() {
+		boolean isSuccess = robot != null ? (robot.isActive() ? robot.isValidToString() : false) : false;
 
-		if (robot != null ? robot.isValidToString() : false) {
+		if (isSuccess)
 			System.out.println(robot);
-			return robot;
-		} else {
-			return null;
-		}
 
+		return isSuccess;
 	}
 
 }

@@ -14,7 +14,7 @@ public class CommandTest {
 		Robot robot = new Robot();
 		PlaceCommand placeCommand = new PlaceCommand(robot, 0, 0, 0);
 
-		assertTrue(placeCommand.execute() != null);
+		assertTrue(placeCommand.execute());
 	}
 
 	@Test
@@ -22,54 +22,62 @@ public class CommandTest {
 		Robot robot = new Robot();
 		PlaceCommand placeCommand = new PlaceCommand(robot, -1, 5, 4);
 
-		assertFalse(placeCommand.execute() != null);
+		assertFalse(placeCommand.execute());
 	}
 
 	@Test
 	public void REPORTCommandIsValid() {
 		Robot robot = new Robot(0, 0, 0);
+		robot.setActive(true);
 		ReportCommand reportCommand = new ReportCommand(robot);
 
-		assertTrue(reportCommand.execute() != null);
+		assertTrue(reportCommand.execute());
 	}
 
 	@Test
 	public void REPORTCommandIsInValid() {
-		Robot robot = null;
+		Robot robot = new Robot(0, 0, 0);
+		robot.setActive(false);
 		ReportCommand reportCommand = new ReportCommand(robot);
 
-		assertFalse(reportCommand.execute() != null);
+		assertFalse(reportCommand.execute());
 	}
 
 	@Test
 	public void MOVECommandIsValid() {
 		Robot robot = new Robot(0, 0, 0);
+		robot.setActive(true);
 		MoveCommand moveCommand = new MoveCommand(robot);
-		assertTrue(moveCommand.execute() != null);
+
+		assertTrue(moveCommand.execute());
 
 		robot = new Robot(3, 3, 0);
+		robot.setActive(true);
 		moveCommand = new MoveCommand(robot);
-		assertTrue(moveCommand.execute() != null);
+
+		assertTrue(moveCommand.execute());
 	}
 
 	@Test
 	public void MOVECommandIsInValid() {
 		Robot robot = null;
 		MoveCommand moveCommand = new MoveCommand(robot);
-		assertFalse(moveCommand.execute() != null);
+
+		assertFalse(moveCommand.execute());
 
 		robot = new Robot(4, 4, 0);
 		moveCommand = new MoveCommand(robot);
 
-		assertFalse(moveCommand.execute() != null);
+		assertFalse(moveCommand.execute());
 	}
 
 	@Test
 	public void LEFTCommandIsValid() {
 		Robot robot = new Robot(0, 0, 0);
+		robot.setActive(true);
 		LeftCommand leftCommand = new LeftCommand(robot);
 
-		assertTrue(leftCommand.execute() != null);
+		assertTrue(leftCommand.execute());
 	}
 
 	@Test
@@ -77,15 +85,22 @@ public class CommandTest {
 		Robot robot = null;
 		LeftCommand leftCommand = new LeftCommand(robot);
 
-		assertFalse(leftCommand.execute() != null);
+		assertFalse(leftCommand.execute());
+
+		robot = new Robot(0, 0, 0);
+		robot.setActive(false);
+		leftCommand = new LeftCommand(robot);
+
+		assertFalse(leftCommand.execute());
 	}
 
 	@Test
 	public void RIGHTCommandIsValid() {
 		Robot robot = new Robot(0, 0, 0);
+		robot.setActive(true);
 		RightCommand rightCommand = new RightCommand(robot);
 
-		assertTrue(rightCommand.execute() != null);
+		assertTrue(rightCommand.execute());
 	}
 
 	@Test
@@ -93,7 +108,13 @@ public class CommandTest {
 		Robot robot = null;
 		RightCommand rightCommand = new RightCommand(robot);
 
-		assertFalse(rightCommand.execute() != null);
+		assertFalse(rightCommand.execute());
+
+		robot = new Robot(0, 0, 0);
+		robot.setActive(false);
+		rightCommand = new RightCommand(robot);
+
+		assertFalse(rightCommand.execute());
 	}
 
 }

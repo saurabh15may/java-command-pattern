@@ -12,21 +12,15 @@ public class RightCommand implements Command {
 	}
 
 	@Override
-	public Robot execute() {
-		if (robot != null ? isValidRightCommand() : false) {
+	public boolean execute() {
+		boolean isSuccess = robot != null ? robot.isActive() : false;
+
+		if (isSuccess) {
 			if (robot.getFaceDirection() == 3)
 				robot.setFaceDirection(0);
 			else
 				robot.setFaceDirection(robot.getFaceDirection() + 1);
-			return robot;
-		} else {
-			return null;
 		}
-
+		return isSuccess;
 	}
-
-	public boolean isValidRightCommand() {
-		return true;
-	}
-
 }
